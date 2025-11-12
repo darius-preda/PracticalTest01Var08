@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +33,34 @@ public class PracticalTest01Var08MainActivity extends AppCompatActivity implemen
 
         play.setOnClickListener(this);
 
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(Constants.RIDDLE)) {
+                riddle.setText(savedInstanceState.getString(Constants.RIDDLE));
+            }
+            if (savedInstanceState.containsKey(Constants.ANSWER)) {
+                answer.setText(savedInstanceState.getString(Constants.ANSWER));
+            }
+        }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(Constants.RIDDLE, riddle.getText().toString());
+        outState.putString(Constants.ANSWER, answer.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(Constants.RIDDLE)) {
+                riddle.setText(savedInstanceState.getString(Constants.RIDDLE));
+            }
+            if (savedInstanceState.containsKey(Constants.ANSWER)) {
+                answer.setText(savedInstanceState.getString(Constants.ANSWER));
+            }
+        }
     }
 
     @Override
@@ -47,6 +75,16 @@ public class PracticalTest01Var08MainActivity extends AppCompatActivity implemen
             startActivityForResult(intent, 1);
 
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == RESULT_OK) {
+            Toast.makeText(this, "Correct answer, VICTORY!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Inorrect answer, FAIL!", Toast.LENGTH_LONG).show();
         }
     }
 }
